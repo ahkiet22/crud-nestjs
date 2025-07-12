@@ -1,0 +1,33 @@
+Project CRUDPOST {
+  database_type: 'SQLite'
+  Note: 'using ORM of prisma. colum type is flowing prisma'   
+}
+
+Table User {
+  id  Int [pk, increment]
+  email String [unique]
+  name  String
+  password String
+  createAt DateTime [default: 'now()']
+  updateAt DateTime [note: '@updateAt']
+}
+
+Table Post {
+  id Int [pk, increment]
+  title string
+  content String
+  authorId Int
+  createAt DateTime [default: 'now()']
+  updateAt DateTime [note: '@updateAt']
+}
+
+Ref: Post.authorId > User.id [delete: cascade, update: no action]
+
+Table RefreshToken {
+  token String  [unique]
+  userId Int
+  expiresAt  DateTime
+  createAt DateTime [default: 'now()']
+}
+
+Ref: RefreshToken.userId > User.id [delete: cascade, update: no action]
