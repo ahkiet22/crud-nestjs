@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer'
 import { IsEmail, IsEmpty, IsNotEmpty, IsString, MinLength } from 'class-validator'
+import { Match } from 'src/common/decorators/custom-validator.decorator'
 
 export class RegisterAuthDto {
   @IsNotEmpty({ message: 'Name is required' })
@@ -18,6 +19,7 @@ export class RegisterAuthDto {
 
   @IsNotEmpty({ message: 'Confirm Password is required' })
   @MinLength(6, { message: 'Confirm password must be at least 6 characters' })
+  @Match('password', { message: 'Password do not match' })
   @IsString()
   confirmPassword: string
 }
