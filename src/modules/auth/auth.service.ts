@@ -12,6 +12,7 @@ import { Prisma } from '@prisma/client'
 import { RegisterAuthDto } from './dto/register-auth.dto'
 import { LoginAuthDto } from './dto/login-auth.dto'
 import { TokenService } from './token.service'
+import { isNotFoundPrismaError, isUniqueConstraintPrismaError } from 'src/common/helpers/prisma-error'
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
       return user
     } catch (error) {
       console.log(error)
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      if (isUniqueConstraintPrismaError(error)) {
         throw new BadRequestException([
           {
             field: 'email',
@@ -124,7 +125,7 @@ export class AuthService {
     } catch (error) {
       console.log(error)
 
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      if (isNotFoundPrismaError(error)) {
         throw new UnauthorizedException('Refresh token has been revoked')
       }
       throw new UnauthorizedException()
