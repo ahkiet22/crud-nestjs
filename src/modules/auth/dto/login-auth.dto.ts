@@ -1,6 +1,7 @@
 import { IsEmail, IsEmpty, IsNotEmpty, IsString, MinLength } from 'class-validator'
 
 export class LoginAuthDto {
+  @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Invalid email format' })
   @IsString({ message: 'Email must be a string' })
   email: string
@@ -9,4 +10,13 @@ export class LoginAuthDto {
   @MinLength(6, { message: 'Password must be at least 6 characters' })
   @IsString({ message: 'Password must be a string' })
   password: string
+}
+
+export class LoginResponseDto {
+  accessToken: string
+  refreshToken: string
+
+  constructor(partial: Partial<LoginResponseDto>) {
+    Object.assign(this, partial)
+  }
 }
