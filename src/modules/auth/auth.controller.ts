@@ -15,6 +15,7 @@ import { LoginAuthDto, LoginResponseDto } from './dto/login-auth.dto'
 import { zip } from 'rxjs/operators'
 import { RefreshTokenBodyDto, RefreshTokenResponseDto } from './dto/token-dto'
 import { AccessTokenGuard } from 'src/common/guards/access-token.guard'
+import { LogoutBodyDto, LogoutResponseDto } from './dto/logout-auth.dto'
 
 @Controller('auth')
 export class AuthController {
@@ -37,5 +38,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async refreshToken(@Body() body: RefreshTokenBodyDto) {
     return new RefreshTokenResponseDto(await this.authService.refreshToken(body.refreshToken))
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@Body() body: LogoutBodyDto) {
+    return new LogoutResponseDto(await this.authService.logout(body.refreshToken))
   }
 }

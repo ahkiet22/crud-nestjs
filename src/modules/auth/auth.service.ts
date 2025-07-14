@@ -131,4 +131,26 @@ export class AuthService {
       throw new UnauthorizedException()
     }
   }
+
+  async logout(refreshToken: string) {
+    try {
+      // 1.verify token
+      const { userId } = await this.tokenService.verifyRefreshToken(refreshToken)
+
+      // 2.  Delete refreshToken
+      await this.prismaService.refreshToken.delete({
+        where: {
+          token: refreshToken,
+        },
+      })
+      return { message: 'Logout successfully' }
+    } catch (error) {
+      console.log(error)
+
+      if (isNotFoundPrismaError(error)) {
+        throw new UnauthorizedException('Refresh token has been revoked')
+      }
+      throw new UnauthorizedException()
+    }
+  }
 }
