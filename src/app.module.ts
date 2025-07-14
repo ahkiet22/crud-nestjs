@@ -8,9 +8,11 @@ import { HashService } from './libs/crypto/hash.service'
 import { AuthModule } from './modules/auth/auth.module'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { TokenModule } from './modules/token/token.module'
-import { TokenService } from './modules/token/token.service'
+import { GuardsModule } from './common/guards/guards.module'
+
+const Modules = [PostsModule, TokenModule, AuthModule]
 @Module({
-  imports: [PostsModule, PrismaModule, AuthModule, TokenModule],
+  imports: [...Modules, PrismaModule, GuardsModule],
   controllers: [AppController],
   providers: [
     AppService,
