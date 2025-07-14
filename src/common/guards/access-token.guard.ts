@@ -13,7 +13,7 @@ export class AccessTokenGuard implements CanActivate {
     }
     try {
       const decodedAccessToken = await this.tokenService.verifyAccessToken(asccessToken)
-      request[REQUEST_USER_KEY] = decodedAccessToken.userId
+      request[REQUEST_USER_KEY] = decodedAccessToken
       return true
     } catch (error) {
       console.log(error)

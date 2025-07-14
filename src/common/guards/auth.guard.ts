@@ -1,7 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import envConfig from 'src/configs/validation'
-import { TokenService } from 'src/modules/token/token.service'
 import { AUTH_TYPE_KEY, AuthTypeDecoratorPayload } from '../decorators/auth.decorator'
 import { AccessTokenGuard } from './access-token.guard'
 import { ApiKeyGuard } from './api-key.guard'
