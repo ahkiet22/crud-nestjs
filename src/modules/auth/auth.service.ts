@@ -104,24 +104,45 @@ export class AuthService {
   async refreshToken(refreshToken: string) {
     try {
       // 1.verify token
-      const { userId } = await this.tokenService.verifyRefreshToken(refreshToken)
+      const { userId, exp } = await this.tokenService.verifyRefreshToken(refreshToken)
 
-      // 2. verify refreshToken already in database
-      await this.prismaService.refreshToken.findUniqueOrThrow({
-        where: {
-          token: refreshToken,
-        },
+      // Verify expired token
+      if (Date.now() > exp * 1000) {
+        await this.prismaService.refreshToken
+          .delete({
+            where: {
+              token: refreshToken,
+            },
+          })
+          .catch(() => null)
+        throw new UnauthorizedException('Token has expired')
+      }
+
+      // Sử dụng transaction để Tránh race-condition nếu cùng một token được refresh đồng thời
+      const tokens = await this.prismaService.$transaction(async (tx) => {
+        // 2. verify refreshToken already in database
+        await tx.refreshToken.findUniqueOrThrow({
+          where: {
+            token: refreshToken,
+          },
+        })
+
+        // 3. Delete refreshToken old
+        await tx.refreshToken.delete({
+          where: {
+            token: refreshToken,
+          },
+        })
+
+        return true
       })
-
-      // 3. Delete refreshToken old
-      await this.prismaService.refreshToken.delete({
-        where: {
-          token: refreshToken,
-        },
-      })
-
       // 4. create new accessToken and refreshToken
-      return this.generateTokens({ userId })
+      if (tokens) {
+        return this.generateTokens({ userId })
+      }
+
+      // 5. protect
+      throw new UnauthorizedException()
     } catch (error) {
       console.log(error)
 

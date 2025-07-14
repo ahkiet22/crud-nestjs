@@ -13,6 +13,10 @@ export class AccessTokenGuard implements CanActivate {
     }
     try {
       const decodedAccessToken = await this.tokenService.verifyAccessToken(asccessToken)
+      const { exp } = decodedAccessToken
+      if (Date.now() > exp * 1000) {
+        throw new UnauthorizedException('Token has expired')
+      }
       request[REQUEST_USER_KEY] = decodedAccessToken
       return true
     } catch (error) {
