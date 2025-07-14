@@ -7,14 +7,14 @@ import { PrismaModule } from './prisma/prisma.module'
 import { HashService } from './libs/crypto/hash.service'
 import { AuthModule } from './modules/auth/auth.module'
 import { APP_INTERCEPTOR } from '@nestjs/core'
+import { TokenModule } from './modules/token/token.module'
+import { TokenService } from './modules/token/token.service'
 @Module({
-  imports: [PostsModule, PrismaModule, AuthModule],
+  imports: [PostsModule, PrismaModule, AuthModule, TokenModule],
   controllers: [AppController],
   providers: [
     AppService,
-    PrismaService,
     HashService,
-
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,

@@ -11,8 +11,8 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import { Prisma } from '@prisma/client'
 import { RegisterAuthDto } from './dto/register-auth.dto'
 import { LoginAuthDto } from './dto/login-auth.dto'
-import { TokenService } from './token.service'
 import { isNotFoundPrismaError, isUniqueConstraintPrismaError } from 'src/common/helpers/prisma-error'
+import { TokenService } from '../token/token.service'
 
 @Injectable()
 export class AuthService {

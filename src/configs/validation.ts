@@ -29,9 +29,13 @@ class ConfigSchema {
 
   @IsString()
   REFRESH_TOKEN_EXPIRES_IN: string
+
+  @IsString()
+  SECRET_API_KEY: string
 }
 
 const configServer = plainToInstance(ConfigSchema, process.env)
+
 const errorArray: ValidationError[] = validateSync(configServer)
 if (errorArray.length > 0) {
   const errors = errorArray.map((eItem) => {
