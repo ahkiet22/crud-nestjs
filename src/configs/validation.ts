@@ -9,10 +9,10 @@ config({
 })
 
 // check file .env
-if (!fs.existsSync(path.resolve('.env'))) {
-  console.log('Not found file .env')
-  process.exit(1)
-}
+// if (!fs.existsSync(path.resolve('.env'))) {
+//   console.log('Not found file .env')
+//   process.exit(1)
+// }
 
 class ConfigSchema {
   @IsString()
