@@ -32,6 +32,9 @@ class ConfigSchema {
 
   @IsString()
   SECRET_API_KEY: string
+
+  @IsString()
+  BASE_URL_CLIENT: string
 }
 
 const configServer = plainToInstance(ConfigSchema, process.env)
